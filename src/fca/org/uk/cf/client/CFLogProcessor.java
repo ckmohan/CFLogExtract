@@ -52,10 +52,7 @@ public class CFLogProcessor {
      */
     public String getZoneListIds() throws IOException {
         String baseUrl = "https://api.cloudflare.com/client/v4/zones?status=active";
-        HttpURLConnection con = (HttpURLConnection) new URL(baseUrl).openConnection();
-        con.setRequestProperty("Accept", "application/json");
-        con.setRequestProperty("X-Auth-Key", PropertiesCache.getInstance().getProperty("cloudflare.authKey"));
-        con.setRequestProperty("X-Auth-Email", PropertiesCache.getInstance().getProperty("registered.emailId"));
+        HttpURLConnection con = getHttpConnection(baseUrl, false);
       
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         
@@ -87,7 +84,7 @@ public class CFLogProcessor {
                 propertiesCache.getProperty("log.requests.operation")
                 + perpareGetQueryParams();
 
-        HttpURLConnection con = getHttpConnection(baseUrl);
+        HttpURLConnection con = getHttpConnection(baseUrl,true);
 
         try {
             Service service = getSplunkService();
@@ -150,7 +147,7 @@ public class CFLogProcessor {
                   propertiesCache.getProperty("cloudflare.zoneTag") +
                   propertiesCache.getProperty("log.requests.operation")
                   + perpareGetQueryParams();
-    	  HttpURLConnection con = getHttpConnection(baseUrl);
+    	  HttpURLConnection con = getHttpConnection(baseUrl,true);
         try {
             String filename = new SimpleDateFormat("dd-MM-yyyy hh-mm-ss'.txt.gz'").format(new Date());
             File targetFile = new File(PropertiesCache.getInstance().getProperty("gz.file.location") +  filename);
@@ -198,7 +195,7 @@ public class CFLogProcessor {
      * @return
      * @throws IOException
      */
-    private HttpURLConnection getHttpConnection(String requestUrl) throws IOException {
+    private HttpURLConnection getHttpConnection(String requestUrl, boolean isgzip) throws IOException {
 
 
     	HttpURLConnection con = null;
@@ -207,7 +204,7 @@ public class CFLogProcessor {
     	if(Boolean.parseBoolean(PropertiesCache.getInstance().getProperty("isProxyEnabled"))){
         	
     		Proxy proxy = new Proxy(Proxy.Type.HTTP, 
-        			new InetSocketAddress(PropertiesCache.getInstance().getProperty("http.proxyPort")
+        			new InetSocketAddress(PropertiesCache.getInstance().getProperty("http.proxyHost")
         			, Integer.parseInt(PropertiesCache.getInstance().getProperty("http.proxyPort"))));
     		
             Authenticator authenticator = new Authenticator() {
@@ -224,7 +221,10 @@ public class CFLogProcessor {
     		con = (HttpURLConnection) new URL(requestUrl).openConnection();	
     	}
 
-        con.setRequestProperty("Accept-Encoding", "gzip");
+    	if(isgzip){
+    		con.setRequestProperty("Accept-Encoding", "gzip");
+    	}
+        
         con.setRequestProperty("Accept", "application/json");
         con.setRequestProperty("X-Auth-Key", PropertiesCache.getInstance().getProperty("cloudflare.authKey"));
         con.setRequestProperty("X-Auth-Email", PropertiesCache.getInstance().getProperty("registered.emailId"));
