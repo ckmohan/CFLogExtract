@@ -17,11 +17,9 @@ public class CFApplication {
 
     @SuppressWarnings("resource")
 	public static void main(String[] args) throws Exception {
-        // create a scanner so we can read the command-line input
-    	if(args ==null || args[0].equalsIgnoreCase("help")) {
-    		
-        	System.out.println("To extact data from cloudflare enter string EXTRACT \n");
-        	System.out.println("To get List of Zone tags for your organisation enter string TAGS \n");
+        // create a scanner so we can read the command-line input		
+        	System.out.println("1 Extact data from cloudflare enter: EXTRACT");
+        	System.out.println("2 Get List of Zone tags for your organisation enter: TAGS \n");
         	
 			Scanner scanner = new Scanner(System.in);
         	String serviceReq = scanner.next();
@@ -49,10 +47,10 @@ public class CFApplication {
         	}else if(serviceReq != null && serviceReq.equalsIgnoreCase("TAGS")) {
         		CFLogProcessor logProcessor = new CFLogProcessor(null);
                 System.out.println(logProcessor.getZoneListIds());
+        	}else {
+        		System.out.println("Invalid input please re-run your program");
         	}
-        }
-        System.out.println("Good bye");            
-    }
+     }
 
     /**
      * Returns epoch time
