@@ -10,7 +10,6 @@ import java.util.Set;
  * This class load all the Clourflare properties from resourcesproperties file from root(/) folder
  * of this binary jar
  * @author CK
- *
  */
 public class PropertiesCache {
 
