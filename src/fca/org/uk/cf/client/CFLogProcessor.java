@@ -51,11 +51,9 @@ public class CFLogProcessor {
      * @throws IOException
      */
     public String getZoneListIds() throws IOException {
-        String baseUrl = "https://api.cloudflare.com/client/v4/zones?status=active";
+        String baseUrl = getBaseUrl() + "/zones?status=active";
         HttpURLConnection con = getHttpConnection(baseUrl, false);
-      
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));        
 		String inputLine;
 		StringBuilder response = new StringBuilder();
 		while ((inputLine = in.readLine()) != null) 
