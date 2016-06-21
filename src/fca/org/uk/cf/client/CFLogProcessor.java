@@ -73,10 +73,8 @@ public class CFLogProcessor {
      */
     private void writeDataToSplunk() throws Exception {
 
-        //String urls = "https://api.cloudflare.com/client/v4/zones/a7d186c7fd4f587e5dd6f0f6d9abe1a5/logs/requests?start=1465373445&end=1465373805";
         /* Constructing query string to retrieve data ip stats */
 
-        //https://api.cloudflare.com/client/v4/zones/a7d186c7fd4f587e5dd6f0f6d9abe1a5/logs/requests?start=1465373445&end=1465373805
         String baseUrl = getBaseUrl() + propertiesCache.getProperty("zonelist.operation") +
                 propertiesCache.getProperty("cloudflare.zoneTag") +
                 propertiesCache.getProperty("log.requests.operation")
